@@ -10,6 +10,7 @@ npm install kaplay@3001.0.0-alpha.21 (ou la version la plus récente) (pour le r
 
 import k from "./kaplayCtx";
 import mainMenu from "./scenes/mainMenu";
+import game from "./scenes/game";
 
 k.loadSprite("chemical-bg", "graphics/chemical-bg.png"); // Importer des sprites, pas besoin de préciser "public/" pour le chemin grace à vite.svg
 k.loadSprite("platforms", "graphics/platforms.png");
@@ -46,7 +47,7 @@ k.loadSound("city", "sounds/city.wav");
 
 k.scene("main-menu", mainMenu); // N'appelle pas mainMenu mais rend main-menu celui qui est responsable d'appeler la fonction
 
-k.scene("game", () => { });
+k.scene("game", game); // On ajoute la scene du jeu (voir fichier game.js)
 
 k.scene("gameover", () => { });
 
