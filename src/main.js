@@ -33,7 +33,8 @@ k.loadSprite("motobug", "graphics/motobug.png", {
     sliceX: 5,
     sliceY: 1,
     anims: {
-        spin: { from: 0, to: 4, loop: true, speed: 8 },
+        run: { from: 0, to: 4, loop: true, speed: 30 }, // ligne perso ajoutée
+
     },
 });
 k.loadFont("mania", "fonts/mania.ttf");

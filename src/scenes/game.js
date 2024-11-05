@@ -1,5 +1,6 @@
 import k from "../kaplayCtx";
 import { makeSonic } from "../entities/sonic";
+import { makeMotobug } from "../entities/motobug";
 
 export default function game() {
     k.setGravity(3100);
@@ -29,6 +30,7 @@ export default function game() {
         k.add([k.sprite("platforms"), k.pos(platformWidth * 4, 450), k.scale(4)]),
     ];
 
+    // Création d'un sonic dans la scene game
     const sonic = makeSonic(k.vec2(200, 745)); // Position de sonic
     sonic.setControls();
     sonic.setEvents();
@@ -37,6 +39,27 @@ export default function game() {
     k.loop(1, () => {
         gameSpeed += 50;
     });
+
+    // Fonction de création d'un motobug dans la scene game
+    const spawnMotoBug = () => {
+        const motobug = makeMotobug(k.vec2(1950, 773));
+        motobug.onUpdate(() => {
+            if (gameSpeed < 3000) {
+                motobug.move(-(gameSpeed + 300), 0) // Tant que la gameSpeed est en dessous de 3000, le motobug se déplace à la vitesse du jeu +300 en x (- pour qu'il aille à gauche car les x avancent vers la droite de l'écran), et 0 en y pour ne pas qu'il monte ou descende
+                return; // On renvoi ce motobug donc la suite n'est pas executé (comme un break)
+            }
+            motobug.move(-gameSpeed, 0); // Sinon le motobug ne bouge pas
+        });
+        // Lorsque le motobug quitte l'écran
+        motobug.onExitScreen(() => {
+            if (motobug.pos.x < 0)
+                k.destroy(motobug); // On détruit le motobug
+        });
+
+        const waitTime = k.rand(0.5, 2.5);
+        k.wait(waitTime, spawnMotoBug); // Récursif : on attend un temps random (défini à la ligne du dessus) avant de recréer un motobug
+    };
+    spawnMotoBug();
 
     k.add([
         k.rect(1920, 300),
