@@ -34,6 +34,18 @@ export default function game() {
     const sonic = makeSonic(k.vec2(200, 745)); // Position de sonic
     sonic.setControls();
     sonic.setEvents();
+    sonic.onCollide("enemy", (enemy) => { // Si sonic touche un enemy, on execute le bloc suivant (soit appel à cette fonction) avec en parametre le tag entré (le parametre et le tag peuvent avoir des libelés différents)
+        if (!sonic.isGrounded()) // Si sonic ne touche pas le sol
+        {
+            k.play("destroy", { volume: 0.5 }); // On play le destroy sound à 50%
+            k.play("hyper-ring", { volume: 0.5 });
+            k.destroy(enemy); // L'ennemi est détruit
+            sonic.play("jump"); // Sonic ressaute automatiquement sur l'ennemi (extra-jump)
+            sonic.jump(); // On remet le son du saut
+            // TODO (selon la vidéo)
+            return;
+        }
+    });
 
     let gameSpeed = 300;
     k.loop(1, () => {
