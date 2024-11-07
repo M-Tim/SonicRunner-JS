@@ -1,6 +1,7 @@
 import k from "../kaplayCtx";
 import { makeSonic } from "../entities/sonic";
 import { makeMotobug } from "../entities/motobug";
+import { makeRing } from "../entities/ring";
 
 export default function game() {
     k.setGravity(3100);
@@ -30,6 +31,9 @@ export default function game() {
         k.add([k.sprite("platforms"), k.pos(platformWidth * 4, 450), k.scale(4)]),
     ];
 
+    let score = 0;
+    let scoreMultiplier = 0;
+
     // Création d'un sonic dans la scene game
     const sonic = makeSonic(k.vec2(200, 745)); // Position de sonic
     sonic.setControls();
@@ -45,6 +49,18 @@ export default function game() {
             // TODO (selon la vidéo)
             return;
         }
+
+        // Sinon
+        k.play("hurt", { volume: 0.5 }); // play hurt sound
+        // TODO (selon vidéo)
+        k.go("gameover"); // On va sur la scene gameover
+    });
+
+    sonic.onCollide("ring", (ring) => {
+        k.play("ring", { volume: 0.5 });
+        k.destroy(ring);
+        score++;
+        // TODO
     });
 
     let gameSpeed = 300;
@@ -72,6 +88,21 @@ export default function game() {
         k.wait(waitTime, spawnMotoBug); // Récursif : on attend un temps random (défini à la ligne du dessus) avant de recréer un motobug
     };
     spawnMotoBug();
+
+    const spawnRing = () => {
+        const ring = makeRing(k.vec2(1950, 745));
+        ring.onUpdate(() => {
+            ring.move(-gameSpeed, 0);
+        });
+        ring.onExitScreen(() => {
+            if (ring.pos.x < 0)
+                k.destroy(ring);
+        });
+
+        const waitTime = k.rand(0.5, 3);
+        k.wait(waitTime, spawnRing);
+    };
+    spawnRing();
 
     k.add([
         k.rect(1920, 300),
