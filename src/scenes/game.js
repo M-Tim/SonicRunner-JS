@@ -34,6 +34,11 @@ export default function game() {
     let score = 0;
     let scoreMultiplier = 0;
 
+    const scoreText = k.add([
+        k.text("SCORE : 0", { font: "mania", size: 72 }),
+        k.pos(20, 20)
+    ]);
+
     // Création d'un sonic dans la scene game
     const sonic = makeSonic(k.vec2(200, 745)); // Position de sonic
     sonic.setControls();
@@ -46,7 +51,9 @@ export default function game() {
             k.destroy(enemy); // L'ennemi est détruit
             sonic.play("jump"); // Sonic ressaute automatiquement sur l'ennemi (extra-jump)
             sonic.jump(); // On remet le son du saut
-            // TODO (selon la vidéo)
+            scoreMultiplier += 1; // Si sonic saute sur un ennemie, le scoreMultiplier est incrémenté tant que sonic ne retouche pas le sol
+            score += 5 * scoreMultiplier; // On ajoute au score, 5*le nombre de fois que sonic saute sur un ennemie sans retoucher le sol
+            scoreText.text = `SCORE : ${score}`; // On affiche le score recalculé à chaque fois
             return;
         }
 
@@ -56,11 +63,12 @@ export default function game() {
         k.go("gameover"); // On va sur la scene gameover
     });
 
+
     sonic.onCollide("ring", (ring) => {
         k.play("ring", { volume: 0.5 });
         k.destroy(ring);
         score++;
-        // TODO
+        scoreText.text = `SCORE : ${score}`; // Modifie le contenu du texte de scoreText en utilisant la variable score
     });
 
     let gameSpeed = 300;
@@ -113,6 +121,10 @@ export default function game() {
     ]);
 
     k.onUpdate(() => {
+        // Si sonic touche le sol, on réinitialise le combo à 0
+        if (sonic.isGrounded())
+            scoreMultiplier = 0;
+
         // Voir fichier mainMenu.js
         if (bgPieces[1].pos.x < 0) {
             bgPieces[0].moveTo(bgPieces[1].pos.x + bgPieceWidth * 2, 0);
@@ -132,7 +144,5 @@ export default function game() {
         }
         platforms[0].move(-gameSpeed, 0)
         platforms[1].moveTo(platforms[0].pos.x + platformWidth * 4, 450)
-
-
     })
 }
