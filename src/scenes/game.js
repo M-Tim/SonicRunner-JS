@@ -54,6 +54,11 @@ export default function game() {
             scoreMultiplier += 1; // Si sonic saute sur un ennemie, le scoreMultiplier est incrémenté tant que sonic ne retouche pas le sol
             score += 5 * scoreMultiplier; // On ajoute au score, 5*le nombre de fois que sonic saute sur un ennemie sans retoucher le sol
             scoreText.text = `SCORE : ${score}`; // On affiche le score recalculé à chaque fois
+            if (scoreMultiplier === 1) // Si un premier ennemi est battu
+                sonic.ringCollectUI.text = "+5";
+            if (scoreMultiplier > 1) // Si on détruit plus d'un ennemi avant de retomber
+                sonic.ringCollectUI.text = `x${scoreMultiplier}`;
+            k.wait(1, () => sonic.ringCollectUI.text = "");
             return;
         }
 
@@ -69,6 +74,8 @@ export default function game() {
         k.destroy(ring);
         score++;
         scoreText.text = `SCORE : ${score}`; // Modifie le contenu du texte de scoreText en utilisant la variable score
+        sonic.ringCollectUI.text = "+1"; // On change le texte de ringCollectUI
+        k.wait(1, () => sonic.ringCollectUI.text = "") // On laisse le texte pendant 1 seconde avant de le mettre à vide
     });
 
     let gameSpeed = 300;

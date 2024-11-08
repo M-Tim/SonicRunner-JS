@@ -9,6 +9,7 @@ export function makeSonic(pos) {
         k.pos(pos),
         k.body({ jumpForce: 1700 }), // à quel point le gameobject (ici sonic) va sauter lors de l'appel à this.jump()
         {
+            ringCollectUI: null,
             setControls() {
                 k.onButtonPress("jump", () => { // Si le bouton saut est pressé
                     if (this.isGrounded()) // Si sonic est sur une plateforme
@@ -27,5 +28,13 @@ export function makeSonic(pos) {
             }
         },
     ]);
+
+    sonic.ringCollectUI = sonic.add([ // On ajoute un child à sonic (ici qui affichera le score ajouté)
+        k.text("", { font: "mania", size: 16 }),
+        k.color(255, 255, 0),
+        k.anchor("center"),
+        k.pos(30, -10)
+    ]);
+
     return sonic;
 }
