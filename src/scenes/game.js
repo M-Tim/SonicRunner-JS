@@ -4,6 +4,7 @@ import { makeMotobug } from "../entities/motobug";
 import { makeRing } from "../entities/ring";
 
 export default function game() {
+    const citySfx = k.play("city", { volume: 0.2, loop: true }); // déclaration d'une fonction qui joue un son d'ambiance
     k.setGravity(3100);
 
     // Voir fichier mainMenu.js
@@ -64,8 +65,8 @@ export default function game() {
 
         // Sinon
         k.play("hurt", { volume: 0.5 }); // play hurt sound
-        // TODO (selon vidéo)
-        k.go("gameover"); // On va sur la scene gameover
+        k.setData("current-score", score);
+        k.go("gameover", citySfx); // On va sur la scene gameover et on met le son citySfx en paramètre (ce n'est pas une copie, pour l'utiliser comme une copie il faut faire {citySfx} si j'ai bien compris)
     });
 
 

@@ -11,6 +11,7 @@ npm install kaplay@3001.0.0-alpha.21 (ou la version la plus récente) (pour le r
 import k from "./kaplayCtx";
 import mainMenu from "./scenes/mainMenu";
 import game from "./scenes/game";
+import gameover from "./scenes/gameover";
 
 k.loadSprite("chemical-bg", "graphics/chemical-bg.png"); // Importer des sprites, pas besoin de préciser "public/" pour le chemin grace à vite.svg
 k.loadSprite("platforms", "graphics/platforms.png");
@@ -43,12 +44,13 @@ k.loadSound("hurt", "sounds/Hurt.wav");
 k.loadSound("hyper-ring", "sounds/HyperRing.wav");
 k.loadSound("jump", "sounds/Jump.wav");
 k.loadSound("ring", "sounds/Ring.wav");
-k.loadSound("city", "sounds/city.wav");
+k.loadSound("city", "sounds/city.mp3");
+k.loadSound("metallic-madness", "sounds/jp_metallic_madness_zone_(present).mp3");
 
 k.scene("main-menu", mainMenu); // N'appelle pas mainMenu mais rend main-menu celui qui est responsable d'appeler la fonction
 
 k.scene("game", game); // On ajoute la scene du jeu (voir fichier game.js)
 
-k.scene("gameover", () => { });
+k.scene("gameover", gameover);
 
 k.go("main-menu"); // Scene par défaut
